@@ -4,9 +4,10 @@ from rest_framework import status
 from django.core.exceptions import ValidationError
 from apps.professionals.serializers.professionals_serializer import ProfessionalSerializer
 from apps.professionals.services.professionals_service import ProfessionalService
-
+from rest_framework.permissions import IsAuthenticated
 
 class ProfessionalListView(APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfessionalSerializer
     service = ProfessionalService()
 
@@ -36,6 +37,7 @@ class ProfessionalListView(APIView):
 
 
 class ProfessionalDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfessionalSerializer
     service = ProfessionalService()
 

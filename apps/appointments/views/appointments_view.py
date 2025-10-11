@@ -4,9 +4,10 @@ from rest_framework import status
 from django.core.exceptions import ValidationError
 from apps.appointments.serializers.appointments_serializer import AppointmentSerializer
 from apps.appointments.services.appointments_service import AppointmentService
-
+from rest_framework.permissions import IsAuthenticated
 
 class AppointmentListView(APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = AppointmentSerializer
     service = AppointmentService()
 
@@ -29,6 +30,7 @@ class AppointmentListView(APIView):
 
 
 class AppointmentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = AppointmentSerializer
     service = AppointmentService()
 
