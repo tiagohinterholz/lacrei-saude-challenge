@@ -1,0 +1,81 @@
+# ==========================================
+# PYTHON / DJANGO / POETRY PROJECT
+# ==========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Poetry
+poetry.lock
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+env.bak/
+env/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+media/
+staticfiles/
+static/
+*.sqlite3
+
+# Local settings
+.env.*
+*.env
+*.local
+local_settings.py
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# VSCode
+.vscode/
+.history/
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.swp
+*.swo
+docker-compose.override.yml
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# JetBrains / PyCharm
+.idea/
+*.iml
+
+# Build / dist
+build/
+dist/
+*.egg-info/
+.eggs/
+
+
+# ==========================================
+# END
+# ==========================================
