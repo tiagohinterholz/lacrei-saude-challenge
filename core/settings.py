@@ -6,12 +6,14 @@ from django.contrib.messages import constants
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
+
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-APPS_DIR = str(os.path.join(BASE_DIR,'apps'))
+APPS_DIR = str(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
