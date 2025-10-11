@@ -12,6 +12,7 @@ class TimeStampedModel(models.Model):
 
 class BaseModel(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     class Meta:
         abstract = True

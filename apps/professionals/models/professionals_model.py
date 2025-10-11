@@ -5,7 +5,6 @@ from apps.common.models import BaseModel
 class Professional(BaseModel):
     social_name = models.CharField(max_length=120)
     profession = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.social_name} - {self.profession}"
