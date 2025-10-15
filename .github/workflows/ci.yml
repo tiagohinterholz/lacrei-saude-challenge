@@ -27,16 +27,32 @@ jobs:
 
       - name: Export Django SECRET_KEY
         run: echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
-      
+
       - name: Configure SQLite for tests
         run: |
           echo "DB_ENGINE=django.db.backends.sqlite3" >> $GITHUB_ENV
           echo "DB_NAME=:memory:" >> $GITHUB_ENV
 
-      # - name: Run lint
-      #   run: poetry run flake8 apps
+      - name: Run lint
+        run: poetry run flake8 apps
 
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: poetry run pytest --maxfail=1 --disable-warnings -q
+
+      - name: Zip project for deployment
+        if: github.ref == 'refs/heads/master'
+        run: zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*"
+
+      - name: Deploy to AWS Elastic Beanstalk
+        if: github.ref == 'refs/heads/master'
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: lacrei-saude-api
+          environment_name: lacrei-saude-prod
+          region: ${{ secrets.AWS_REGION }}
+          version_label: v-${{ github.run_number }}
+          deployment_package: ./deploy.zip
