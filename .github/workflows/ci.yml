@@ -1,0 +1,75 @@
+name: CI/CD Lacrei Saúde
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: lacrei
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U root -d lacrei"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      ENGINE_DB: django.db.backends.postgresql
+      NAME_DB: lacrei
+      USER_DB: root
+      PASSWORD_DB: root
+      HOST_DB: localhost
+      PORT_DB: 5432
+      DEBUG: False
+      SECRET_KEY: fake-key
+      ALLOWED_HOSTS: localhost,127.0.0.1
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Run lint
+        run: |
+          pip install flake8
+          flake8 apps
+
+      - name: Run tests
+        run: |
+          pytest -v --disable-warnings --maxfail=1
+
+      - name: Build Docker image
+        run: docker build -t lacrei-api .
+
+      - name: Deploy to AWS (placeholder)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Fazer deploy automático com AWS ECS / Elastic Beanstalk ou EC2"
+          echo "Deploy simulado para fins de desafio."
+
+      - name: Rollback (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Rollback manual executado - revertendo deploy anterior"
