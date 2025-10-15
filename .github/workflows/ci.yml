@@ -33,25 +33,17 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-root
 
-      - name: Configure Django environment
-        run: |
-          echo "SECRET_KEY=${DJANGO_SECRET_KEY}" >> $GITHUB_ENV
-          echo "DB_ENGINE=django.db.backends.sqlite3" >> $GITHUB_ENV
-          echo "DB_NAME=:memory:" >> $GITHUB_ENV
-          echo "DEBUG=True" >> $GITHUB_ENV
-
-      - name: Run tests (SQLite in-memory)
+      - name: Run tests (using SQLite)
         env:
           SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DEBUG: "True"
-          DB_ENGINE: "django.db.backends.sqlite3"
+          DB_ENGINE: django.db.backends.sqlite3
           DB_NAME: ":memory:"
+          DEBUG: "True"
         run: |
-          echo "Running tests..."
+          echo "Running tests with SQLite..."
           poetry run pytest --disable-warnings -q
 
-      - name: Zip project for deployment
+      - name: Prepare deploy package
         run: |
           zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*" "*.sqlite3"
 
