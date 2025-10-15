@@ -1,6 +1,5 @@
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from rest_framework.response import Response
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
