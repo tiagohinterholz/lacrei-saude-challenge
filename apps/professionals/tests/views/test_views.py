@@ -4,7 +4,6 @@ from apps.common.misc.request_mixin import AuthRequestMixin
 from django.urls import reverse
 
 
-
 @pytest.mark.django_db
 class TestProfessionalView(AuthRequestMixin):
     base_uri = "/professionals/"
@@ -18,7 +17,8 @@ class TestProfessionalView(AuthRequestMixin):
 
     def test_create_professional(self, api_client, professional_base_dict, superuser):
         url = reverse("professional-list")
-        response = self.auth_post(client=api_client, admin=superuser, uri=url, body=professional_base_dict)
+        response = self.auth_post(
+            client=api_client, admin=superuser, uri=url, body=professional_base_dict)
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["social_name"] == "Dr. Ana Paula"
 
@@ -38,4 +38,5 @@ class TestProfessionalView(AuthRequestMixin):
             client=api_client, obj=professional_obj, admin=superuser, uri=url
         )
 
-        assert response.status_code in [status.HTTP_204_NO_CONTENT, status.HTTP_200_OK]
+        assert response.status_code in [
+            status.HTTP_204_NO_CONTENT, status.HTTP_200_OK]

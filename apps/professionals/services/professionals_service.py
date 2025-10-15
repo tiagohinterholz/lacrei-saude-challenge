@@ -36,9 +36,11 @@ class ProfessionalService:
         professional.save()
 
         if address_data:
-            self.address_repo.update_by_filter({"professional": professional}, **address_data)
+            self.address_repo.update_by_filter(
+                {"professional": professional}, **address_data)
         if contact_data:
-            self.contact_repo.update_by_filter({"professional": professional}, **contact_data)
+            self.contact_repo.update_by_filter(
+                {"professional": professional}, **contact_data)
 
         return professional
 

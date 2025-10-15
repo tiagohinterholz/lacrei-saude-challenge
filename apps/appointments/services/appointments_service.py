@@ -13,7 +13,8 @@ class AppointmentService:
         scheduled_at = data.get("scheduled_at")
 
         if self.appointment_repo.exists_at_same_time(professional_id, scheduled_at):
-            raise ValueError("This professional already has an appointment at this time.")
+            raise ValueError(
+                "This professional already has an appointment at this time.")
 
         return self.appointment_repo.create(**data)
 
@@ -35,7 +36,8 @@ class AppointmentService:
 
         if professional_id and scheduled_at:
             if self.appointment_repo.exists_at_same_time(professional_id, scheduled_at):
-                raise ValueError("This professional already has an appointment at this time.")
+                raise ValueError(
+                    "This professional already has an appointment at this time.")
 
         return self.appointment_repo.update(appointment_id, **data)
 

@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Professional",
             fields=[
-                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("created_at", models.DateTimeField(
+                    auto_now_add=True, db_index=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
                     "id",
@@ -38,7 +39,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="ProfessionalAddress",
             fields=[
-                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("created_at", models.DateTimeField(
+                    auto_now_add=True, db_index=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
                     "id",
@@ -52,7 +54,8 @@ class Migration(migrations.Migration):
                 ("is_active", models.BooleanField(db_index=True, default=True)),
                 ("street", models.CharField(max_length=255)),
                 ("number", models.CharField(max_length=20)),
-                ("complement", models.CharField(blank=True, max_length=100, null=True)),
+                ("complement", models.CharField(
+                    blank=True, max_length=100, null=True)),
                 ("district", models.CharField(max_length=100)),
                 ("city", models.CharField(max_length=100)),
                 ("state", models.CharField(max_length=100)),
@@ -75,7 +78,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="ProfessionalContact",
             fields=[
-                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("created_at", models.DateTimeField(
+                    auto_now_add=True, db_index=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
                     "id",

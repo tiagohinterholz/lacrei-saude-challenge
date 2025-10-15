@@ -6,7 +6,7 @@ from apps.common.repositories.common_repository import CommonRepository
 class AppointmentsRepository(CommonRepository):
     def __init__(self):
         super().__init__(Appointment)
-        
+
     def get_by_professional(self, professional_id):
         return self.model.objects.filter(professional_id=professional_id, is_active=True)
 

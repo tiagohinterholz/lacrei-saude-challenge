@@ -2,6 +2,7 @@ import pytest
 
 from apps.professionals.models.professionals_model import Professional, ProfessionalAddress, ProfessionalContact
 
+
 @pytest.fixture
 def professional_base_dict():
     return {
@@ -21,6 +22,7 @@ def professional_base_dict():
             "phone": "+55 41 98888-7777"
         }
     }
+
 
 @pytest.fixture
 def professional_partial_dict():

@@ -6,6 +6,7 @@ from apps.professionals.serializers.professionals_serializer import Professional
 from apps.professionals.services.professionals_service import ProfessionalService
 from rest_framework.permissions import IsAuthenticated
 
+
 class ProfessionalListView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProfessionalSerializer
@@ -27,7 +28,8 @@ class ProfessionalListView(APIView):
                 address_data = serializer.validated_data["address"]
                 contact_data = serializer.validated_data["contact"]
 
-                professional = self.service.create_professional(professional_data, address_data, contact_data)
+                professional = self.service.create_professional(
+                    professional_data, address_data, contact_data)
                 return Response(self.serializer_class(professional).data, status=status.HTTP_201_CREATED)
 
             except ValidationError as e:
@@ -60,7 +62,8 @@ class ProfessionalDetailView(APIView):
                 address_data = serializer.validated_data.get("address")
                 contact_data = serializer.validated_data.get("contact")
 
-                professional = self.service.update_professional(professional_id, professional_data, address_data, contact_data)
+                professional = self.service.update_professional(
+                    professional_id, professional_data, address_data, contact_data)
                 return Response(self.serializer_class(professional).data, status=status.HTTP_200_OK)
 
             except ValidationError as e:

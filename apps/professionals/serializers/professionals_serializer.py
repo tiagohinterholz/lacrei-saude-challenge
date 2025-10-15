@@ -46,8 +46,10 @@ class ProfessionalSerializer(serializers.ModelSerializer):
         contact_data = validated_data.pop("contact")
 
         professional = Professional.objects.create(**validated_data)
-        ProfessionalAddress.objects.create(professional=professional, **address_data)
-        ProfessionalContact.objects.create(professional=professional, **contact_data)
+        ProfessionalAddress.objects.create(
+            professional=professional, **address_data)
+        ProfessionalContact.objects.create(
+            professional=professional, **contact_data)
         return professional
 
     def update(self, instance, validated_data):

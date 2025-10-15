@@ -10,7 +10,8 @@ class TestAppointmentSerializer:
         serializer = AppointmentSerializer(appointment_obj)
         data = serializer.data
 
-        assert data["professional"]["id"] == str(appointment_obj.professional.id)
+        assert data["professional"]["id"] == str(
+            appointment_obj.professional.id)
         assert data["professional"]["social_name"] == appointment_obj.professional.social_name
         assert data["status"] == AppointmentStatus.SCHEDULED
         assert "scheduled_at" in data
@@ -22,7 +23,8 @@ class TestAppointmentSerializer:
 
         validated = serializer.validated_data
         assert validated["professional"].id == appointment_dict["professional_id"]
-        assert validated["status"] == appointment_dict.get("status", AppointmentStatus.SCHEDULED)
+        assert validated["status"] == appointment_dict.get(
+            "status", AppointmentStatus.SCHEDULED)
         assert "scheduled_at" in validated
 
     def test_partial_update_serializer(self, appointment_obj, appointment_partial_dict):

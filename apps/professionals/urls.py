@@ -6,5 +6,6 @@ from apps.professionals.views.professionals_view import (
 
 urlpatterns = [
     path("", ProfessionalListView.as_view(), name="professional-list"),
-    path("<uuid:professional_id>/", ProfessionalDetailView.as_view(), name="professional-detail"),
+    path("<uuid:professional_id>/", ProfessionalDetailView.as_view(),
+         name="professional-detail"),
 ]

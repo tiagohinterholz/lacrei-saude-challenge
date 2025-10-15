@@ -27,7 +27,7 @@ class CommonRepository:
             setattr(instance, attr, value)
         instance.save()
         return instance
-    
+
     def update_by_filter(self, filters: dict, **kwargs):
         return self.model.objects.filter(**filters).update(**kwargs)
 
