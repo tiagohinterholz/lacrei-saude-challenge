@@ -52,7 +52,7 @@ jobs:
         run: poetry install --no-interaction --no-root
 
       - name: Set environment variables
-        run: echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
+        run: echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
 
       - name: Run lint
         run: |
