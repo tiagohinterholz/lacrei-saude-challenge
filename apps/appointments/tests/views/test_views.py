@@ -36,7 +36,21 @@ class TestAppointmentView(AuthRequestMixin):
 
         assert response.status_code in [status.HTTP_200_OK, status.HTTP_204_NO_CONTENT]
 
-        # verifica soft delete
         from apps.appointments.models import Appointment
         deleted = Appointment.objects.get(id=appointment_obj.id)
         assert deleted.is_active is False
+
+    def test_create_appointment_invalid(self, api_client, superuser):
+        url = reverse("appointment-list")
+        invalid_data = {"notes": "Sem profissional"}
+        response = self.auth_post(client=api_client, admin=superuser, uri=url, body=invalid_data)
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "professional_id" in response.data or "scheduled_at" in response.data
+
+
+    def test_unauthorized_access(self, api_client):
+        url = reverse("appointment-list")
+        response = api_client.get(url)
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
