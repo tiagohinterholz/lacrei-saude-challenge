@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - master
-      - develop
+
+concurrency:
+  group: deploy-master
+  cancel-in-progress: true
 
 jobs:
   build-test-deploy:
@@ -37,21 +40,22 @@ jobs:
           echo "DB_NAME=:memory:" >> $GITHUB_ENV
           echo "DEBUG=True" >> $GITHUB_ENV
 
-      # - name: Lint check
-      #   run: poetry run flake8 apps
-
       - name: Run tests (SQLite in-memory)
         env:
           SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        run: poetry run pytest --disable-warnings -q
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DEBUG: "True"
+          DB_ENGINE: "django.db.backends.sqlite3"
+          DB_NAME: ":memory:"
+        run: |
+          echo "Running tests..."
+          poetry run pytest --disable-warnings -q
 
       - name: Zip project for deployment
-        if: github.ref == 'refs/heads/master'
         run: |
           zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*" "*.sqlite3"
 
       - name: Deploy to AWS Elastic Beanstalk
-        if: github.ref == 'refs/heads/master'
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
