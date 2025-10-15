@@ -34,8 +34,8 @@ SSL_REDIRECT=False
 
 ENGINE_DB=django.db.backends.postgresql
 NAME_DB=lacrei
-USER_DB=seu_user
-PASSWORD_DB=seu_password
+USER_DB=root
+PASSWORD_DB=root
 HOST_DB=localhost
 PORT_DB=5432
 
@@ -50,11 +50,11 @@ PORT=8000
 No PostgreSQL:
 ```sql
 CREATE DATABASE lacrei;
-CREATE USER seu_user WITH PASSWORD 'seu_user';
-ALTER ROLE seu_user SET client_encoding TO 'utf8';
-ALTER ROLE seu_user SET default_transaction_isolation TO 'read committed';
-ALTER ROLE seu_user SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE lacrei TO seu_user;
+CREATE USER seu_user WITH PASSWORD 'root';
+ALTER ROLE root SET client_encoding TO 'utf8';
+ALTER ROLE root SET default_transaction_isolation TO 'read committed';
+ALTER ROLE root SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE lacrei TO root;
 ```
 
 ### 4️⃣ Configure o ambiente Poetry
