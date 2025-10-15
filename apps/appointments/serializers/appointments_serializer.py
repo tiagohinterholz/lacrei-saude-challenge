@@ -21,11 +21,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = [
             "id",
+            "professional",
+            "professional_id",
             "scheduled_at",
             "status",
             "notes",
-            "professional",
-            "professional_id",
-            "created_at",
-            "updated_at",
         ]
+        read_only_fields = ["id"]

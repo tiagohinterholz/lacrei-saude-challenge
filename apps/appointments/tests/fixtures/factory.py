@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
-from apps.professionals.tests.fixtures.factory import create_professional
+from apps.professionals.tests.fixtures.factory import professional_factory
 from apps.appointments.models import Appointment, AppointmentStatus
 
 
 def create_appointment(professional=None, **kwargs):
     if not professional:
-        professional = create_professional()
+        professional = professional_factory()
 
     defaults = {
         "professional": professional,
