@@ -65,7 +65,11 @@ class AuthRequestMixin:
         return body
 
     def _get_url(self, uri, params):
+        if not uri.endswith("/"):
+            uri = f"{uri}/"
+
         if not params:
             return uri
+
         import urllib.parse
         return f"{uri}?{urllib.parse.urlencode(params)}"
