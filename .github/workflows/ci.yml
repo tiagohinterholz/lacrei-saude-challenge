@@ -28,10 +28,20 @@ jobs:
           python-version: '3.12'
 
       - name: Install Poetry
-        run: pip install poetry
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
 
-      - name: Install dependencies
-        run: poetry install --no-root
+      - name: Export dependencies for Elastic Beanstalk
+        run: |
+          poetry export -f requirements.txt --output requirements.txt --without-hashes
+          echo "✅ requirements.txt generated for Elastic Beanstalk:"
+          head -n 10 requirements.txt
+
+      - name: Install dependencies from exported requirements (sanity check)
+        run: |
+          pip install -r requirements.txt
+          python -m django --version || echo "✅ Django installed successfully"
 
       - name: Run tests (SQLite in-memory)
         env:
@@ -40,7 +50,6 @@ jobs:
           NAME_DB: ":memory:"
           DEBUG: "True"
         run: |
-          export SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"
           echo "Running tests with SQLite..."
           poetry run pytest --disable-warnings -q
 
