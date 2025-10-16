@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # ===================== CONFIG BÁSICA =====================
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "dummy-secret-key-for-ci-only")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
