@@ -58,6 +58,14 @@ jobs:
           APPEND_SLASH: "False"
         run: |
           echo "Running tests with SQLite..."
+          echo "DEBUG=$DEBUG"
+          echo "APPEND_SLASH=$APPEND_SLASH"
+          export SECRET_KEY=$SECRET_KEY
+          export ENGINE_DB=$ENGINE_DB
+          export NAME_DB=$NAME_DB
+          export DEBUG=$DEBUG
+          export APPEND_SLASH=$APPEND_SLASH
+          poetry run python manage.py shell -c "from django.conf import settings; print('APPEND_SLASH in CI:', settings.APPEND_SLASH)"
           poetry run pytest --disable-warnings -q
 
       - name: Prepare deploy package
