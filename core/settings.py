@@ -106,6 +106,7 @@ if not DEBUG:
 
 # ===================== TEMPLATES E WSGI =====================
 ROOT_URLCONF = "core.urls"
+APPEND_SLASH = False
 
 TEMPLATES = [
     {
