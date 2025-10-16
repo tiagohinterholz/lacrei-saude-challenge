@@ -30,18 +30,19 @@ jobs:
       - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
+          pip install "poetry==1.8.3"
+          poetry --version
 
       - name: Export dependencies for Elastic Beanstalk
         run: |
           poetry export -f requirements.txt --output requirements.txt --without-hashes
-          echo "✅ requirements.txt generated for Elastic Beanstalk:"
+          echo "requirements.txt generated for Elastic Beanstalk:"
           head -n 10 requirements.txt
 
       - name: Install dependencies from exported requirements (sanity check)
         run: |
           pip install -r requirements.txt
-          python -m django --version || echo "✅ Django installed successfully"
+          python -m django --version || echo " Django installed successfully"
 
       - name: Run tests (SQLite in-memory)
         env:
