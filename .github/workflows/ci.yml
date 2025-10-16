@@ -40,6 +40,7 @@ jobs:
           NAME_DB: ":memory:"
           DEBUG: "True"
         run: |
+          export SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"
           echo "Running tests with SQLite..."
           poetry run pytest --disable-warnings -q
 
