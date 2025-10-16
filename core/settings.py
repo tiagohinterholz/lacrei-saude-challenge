@@ -67,6 +67,7 @@ DJANGO_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "django_extensions"
 ]
 
 THIRD_APPS = ["corsheaders", "gunicorn"]
@@ -106,7 +107,6 @@ if not DEBUG:
 
 # ===================== TEMPLATES E WSGI =====================
 ROOT_URLCONF = "core.urls"
-APPEND_SLASH = False
 
 TEMPLATES = [
     {
@@ -153,6 +153,8 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "COERCE_DECIMAL_TO_STRING": False,
 }
+
+APPEND_SLASH = False
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
