@@ -7,9 +7,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Poetry
-poetry.lock
-
 # Virtual environments
 .env
 .venv
