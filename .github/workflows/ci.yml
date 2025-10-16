@@ -33,17 +33,17 @@ jobs:
           pip install "poetry==1.8.3"
           poetry --version
 
+      - name: Install project dependencies (via Poetry)
+        run: |
+          poetry install --no-root --with dev
+          poetry run python -m django --version
+
       - name: Export dependencies for Elastic Beanstalk
         run: |
           poetry export -f requirements.txt --output requirements.txt --without-hashes
-          echo "requirements.txt generated for Elastic Beanstalk:"
+          echo " requirements.txt generated for Elastic Beanstalk:"
           head -n 10 requirements.txt
 
-      - name: Install dependencies from exported requirements (sanity check)
-        run: |
-          pip install -r requirements.txt
-          python -m django --version || echo " Django installed successfully"
-      
       # - name: Lint (flake8 ou black)
       #   run: |
       #     pip install flake8
