@@ -43,6 +43,11 @@ jobs:
         run: |
           pip install -r requirements.txt
           python -m django --version || echo " Django installed successfully"
+      
+      # - name: Lint (flake8 ou black)
+      #   run: |
+      #     pip install flake8
+      #     flake8 --max-line-length=88 --ignore=E203,W503 apps/
 
       - name: Run tests (SQLite in-memory)
         env:
