@@ -191,5 +191,11 @@ jobs:
 
 ---
 
+## 🌐 Ambientes
+
+- **Staging:** https://lacrei-staging.elasticbeanstalk.com/api/schema/swagger-ui/
+- **Produção:** https://lacrei-prod.elasticbeanstalk.com/api/schema/swagger-ui/
+
+
 ## 📄 Licença
 Projeto desenvolvido para o desafio técnico **Lacrei Saúde** — uso educacional e demonstrativo.
