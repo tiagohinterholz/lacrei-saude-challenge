@@ -12,28 +12,39 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 # ===================== CONFIG BÁSICA =====================
 SECRET_KEY = os.getenv("SECRET_KEY", "dummy-secret-key-for-ci-only")
 DEBUG = os.getenv("DEBUG", "False") == "True"
+
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    ".elasticbeanstalk.com",
+    h.strip() for h in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,.elasticbeanstalk.com"
+    ).split(",") if h.strip()
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        "https://*.elasticbeanstalk.com"
+    ).split(",") if o.strip()
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # ===================== CORS =====================
 CORS_ALLOW_HEADERS = list(default_headers) + ["X-Register"]
+CORS_ALLOW_CREDENTIALS = True
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOWED_ORIGINS = []
 else:
+    CORS_ALLOW_ALL_ORIGINS = False
     CORS_ALLOWED_ORIGINS = [
-        "https://lacrei-saude-prod.eba-bc8hq6yk.us-east-2.elasticbeanstalk.com",
+        o.strip() for o in os.getenv(
+            "CORS_ALLOWED_ORIGINS",
+            "https://lacrei-saude-prod.eba-bc8hq6yk.us-east-2.elasticbeanstalk.com"
+        ).split(",") if o.strip()
     ]
 
-CORS_ALLOW_CREDENTIALS = True
-
 # ===================== LOGS =====================
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -44,19 +55,14 @@ LOGGING = {
         },
     },
     "handlers": {
+        # console -> stdout (EB coleta automaticamente)
         "console": {"class": "logging.StreamHandler", "formatter": "verbose"},
-        "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": os.path.join(LOG_DIR, "app.log"),
-            "when": "midnight",
-            "backupCount": 7,
-            "formatter": "verbose",
-        },
     },
     "loggers": {
-        "django": {"handlers": ["console", "file"], "level": "INFO"},
-        "django.request": {"handlers": ["console", "file"], "level": "ERROR", "propagate": False},
-        "apps": {"handlers": ["file"], "level": "INFO", "propagate": True},
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+        "apps": {"handlers": ["console"], "level": "INFO", "propagate": True},
+        "root": {"handlers": ["console"], "level": "INFO"},
     },
 }
 
@@ -103,7 +109,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "3600"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
