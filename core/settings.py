@@ -12,7 +12,11 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 # ===================== CONFIG BÁSICA =====================
 SECRET_KEY = os.getenv("SECRET_KEY", "dummy-secret-key-for-ci-only")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "lacrei-saude-prod.eba-bc8hq6yk.us-east-2.elasticbeanstalk.com,3.150.184.244").split(",")
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".elasticbeanstalk.com",
+]
 
 # ===================== CORS =====================
 CORS_ALLOW_HEADERS = list(default_headers) + ["X-Register"]
@@ -20,8 +24,9 @@ CORS_ALLOW_HEADERS = list(default_headers) + ["X-Register"]
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    CORS_ALLOWED_ORIGINS = [
+        "https://lacrei-saude-prod.eba-bc8hq6yk.us-east-2.elasticbeanstalk.com",
+    ]
 
 CORS_ALLOW_CREDENTIALS = True
 
