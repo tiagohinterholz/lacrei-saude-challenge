@@ -7,7 +7,7 @@ on:
       - master
 
 concurrency:
-  group: deploy-master
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -51,15 +51,29 @@ jobs:
       - name: Prepare deploy package
         run: |
           zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*" "*.sqlite3"
+          echo "Deploy package ready."
+
+      - name: Deploy to AWS Elastic Beanstalk (Staging)
+        if: github.ref == 'refs/heads/develop'
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: lacrei-saude-api
+          environment_name: lacrei-saude-staging
+          region: ${{ secrets.AWS_REGION }}
+          version_label: v-${{ github.run_number }}-staging
+          deployment_package: ./deploy.zip
 
       - name: Deploy to AWS Elastic Beanstalk (Produção)
+        if: github.ref == 'refs/heads/master'
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: lacrei-saude-api
           environment_name: lacrei-saude-prod
-          region: us-east-2
-          version_label: v-${{ github.run_number }}
+          region: ${{ secrets.AWS_REGION }}
+          version_label: v-${{ github.run_number }}-prod
           deployment_package: ./deploy.zip
           use_existing_version_if_available: true

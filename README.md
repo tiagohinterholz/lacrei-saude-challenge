@@ -187,7 +187,10 @@ jobs:
    git revert <commit_sha>
    git push origin main
    ```
-   O pipeline do GitHub Actions reexecuta o deploy da versão anterior.
+   O GitHub Actions detectará o push e reexecutará automaticamente o deploy da versão anterior no ambiente de produção.
+
+  Alternativamente, é possível restaurar uma versão anterior diretamente pelo painel da AWS:
+  Elastic Beanstalk → Application Versions → Actions → Deploy
 
 ---
 
