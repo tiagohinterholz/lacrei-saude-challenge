@@ -13,14 +13,21 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = os.getenv("SECRET_KEY", "dummy-secret-key-for-ci-only")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
+# ===================== HOSTS SEGUROS =====================
+DEFAULT_ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "0.0.0.0",
     ".elasticbeanstalk.com",
     "lacrei-saude-prod.eba-bc8hq6yk.us-east-2.elasticbeanstalk.com",
-    "3.150.184.244",
+    "lacrei-saude-staging.us-east-2.elasticbeanstalk.com",
 ]
+
+# Lê variável de ambiente (se quiser sobrescrever no EB)
+env_hosts = os.getenv("ALLOWED_HOSTS", "")
+extra_hosts = [h.strip() for h in env_hosts.split(",") if h.strip()]
+
+# Junta tudo e remove duplicados
+ALLOWED_HOSTS = list(set(DEFAULT_ALLOWED_HOSTS + extra_hosts + ["0.0.0.0"]))
 
 CSRF_TRUSTED_ORIGINS = [
     o.strip() for o in os.getenv(
