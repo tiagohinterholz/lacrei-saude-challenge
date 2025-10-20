@@ -16,7 +16,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = [
     h.strip() for h in os.getenv(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1,.elasticbeanstalk.com"
+        "localhost,127.0.0.1,0.0.0.0,.elasticbeanstalk.com"
     ).split(",") if h.strip()
 ]
 
