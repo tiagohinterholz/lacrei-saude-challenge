@@ -73,7 +73,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: lacrei-saude-api
           environment_name: lacrei-saude-prod
-          region: ${{ secrets.AWS_REGION }}
+          region: us-east-2
           version_label: v-${{ github.run_number }}-prod
           deployment_package: ./deploy.zip
           use_existing_version_if_available: true
