@@ -1,14 +1,23 @@
-name: CI/CD Pipeline - Lacrei Saúde
+name: 🚀 CI/CD Pipeline - Lacrei Saúde (Staging + Produção)
 
 on:
   push:
     branches:
-      - master
       - develop
+      - master
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
+    env:
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
 
     steps:
       - name: Checkout repository
@@ -20,23 +29,30 @@ jobs:
           python-version: '3.12'
 
       - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install dependencies
         run: |
-          poetry config virtualenvs.create false
-          poetry install --no-root --no-interaction --no-ansi
+          python -m pip install --upgrade pip
+          pip install "poetry==1.8.3"
 
-      # - name: Run lint
-      #   run: poetry run flake8 apps
+      - name: Install project dependencies (via Poetry)
+        run: |
+          poetry install --no-root --with dev
 
-      - name: Run tests
-        run: poetry run pytest --maxfail=1 --disable-warnings -q
+      - name: Run tests (SQLite in-memory)
+        env:
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          ENGINE_DB: django.db.backends.sqlite3
+          NAME_DB: ":memory:"
+          DEBUG: "True"
+          APPEND_SLASH: "True"
+        run: |
+          echo "Running tests with SQLite..."
+          poetry run pytest --disable-warnings -q
 
-      - name: Zip project for deployment
-        if: github.ref == 'refs/heads/master'
-        run: zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*"
-      
+      - name: Prepare deploy package
+        run: |
+          zip -r deploy.zip . -x "*.git*" "__pycache__/*" "*.pytest_cache/*" "*.sqlite3"
+          echo "Deploy package ready."
+
       - name: Deploy to AWS Elastic Beanstalk (Staging)
         if: github.ref == 'refs/heads/develop'
         uses: einaregilsson/beanstalk-deploy@v22
@@ -46,10 +62,10 @@ jobs:
           application_name: lacrei-saude-api
           environment_name: lacrei-saude-staging
           region: ${{ secrets.AWS_REGION }}
-          version_label: v-${{ github.run_number }}
-          deployment_package: deploy.zip
+          version_label: v-${{ github.run_number }}-staging
+          deployment_package: ./deploy.zip
 
-      - name: Deploy to AWS Elastic Beanstalk
+      - name: Deploy to AWS Elastic Beanstalk (Produção)
         if: github.ref == 'refs/heads/master'
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -58,5 +74,6 @@ jobs:
           application_name: lacrei-saude-api
           environment_name: lacrei-saude-prod
           region: ${{ secrets.AWS_REGION }}
-          version_label: v-${{ github.run_number }}
-          deployment_package: deploy.zip
+          version_label: v-${{ github.run_number }}-prod
+          deployment_package: ./deploy.zip
+          use_existing_version_if_available: true
